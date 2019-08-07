@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const mongoose = require('mongoose');
+const path = require('path');
 
 // // MongoDB connection url
 const mongoURL = require('./mongoUrl');
@@ -21,5 +22,11 @@ app.use(bodyParser.json());
 // Import routes
 const routes = require('./routes/index')();
 app.use('/', routes);
+
+app.use(express.static('client/build'));
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
+});
 
 module.exports = app;
